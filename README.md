@@ -148,7 +148,7 @@ Instagram Story dan akun private tidak didukung. Carousel yang seluruh medianya 
 | `!hidetag <teks>` | `!h` | Mengirim hidden tag ke seluruh anggota. |
 | `!infogroup` | `!infogc`, `!infogrup` | Menampilkan informasi grup. |
 | `!setppgc` | `!setppgrup`, `!spgc` | Mengubah foto profil grup. |
-| `!reply @user\|target\|balasan` | `!fitnah` | Membuat balasan dengan quoted message kustom. |
+| `!reply @user\|target\|balasan` | `!fitnah` | Membuat balasan dengan quoted message kustom. Di chat personal gunakan `!reply target\|balasan`. |
 | `!forward <teks>` | `!fwd` | Mengirim teks dengan atribut forwarded. |
 | `!fakeorder <teks>` | `!fake` | Membuat pesan order kustom. |
 

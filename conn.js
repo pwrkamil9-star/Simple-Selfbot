@@ -754,27 +754,35 @@ _Wait Mengirim file..._
 
       case 'fitnah':
       case 'reply':
-        if (!isGroup) return reply('Perintah ini hanya dapat digunakan di dalam grup!')
-        if (!q || !q.includes('|')) return reply(`Contoh penggunaan:\n*${prefix + command}* @tag|pesan target|pesan bot`)
+        if (!q || !q.includes('|')) {
+          const usage = isGroup
+            ? `*${prefix + command}* @tag|pesan target|pesan bot`
+            : `*${prefix + command}* pesan target|pesan bot`
+          return reply(`Contoh penggunaan:\n${usage}`)
+        }
         const argsFitnah = q.split('|')
-        const org = argsFitnah[0] ? argsFitnah[0].trim() : ''
-        const target = argsFitnah[1] ? argsFitnah[1].trim() : ''
-        const bot = argsFitnah[2] ? argsFitnah[2].trim() : ''
-        if (!org) return reply('Tag atau masukkan nomor target!')
+        const org = isGroup && argsFitnah[0] ? argsFitnah[0].trim() : ''
+        const targetIndex = isGroup ? 1 : 0
+        const botIndex = isGroup ? 2 : 1
+        const target = argsFitnah[targetIndex] ? argsFitnah[targetIndex].trim() : ''
+        const bot = argsFitnah[botIndex] ? argsFitnah[botIndex].trim() : ''
+        if (isGroup && !org) return reply('Tag atau masukkan nomor target!')
         if (!target) return reply('Masukkan pesan target!')
         if (!bot) return reply('Masukkan pesan bot!')
 
-        let targetJid
         const mentionedJids = msg.message?.extendedTextMessage?.contextInfo?.mentionedJid || []
-        if (mentionedJids.length > 0) {
-          targetJid = mentionedJids[0]
-        } else {
-          const parsedTarget = parseMention(org)
-          if (parsedTarget.length > 0) {
-            targetJid = parsedTarget[0]
+        let targetJid = !isGroup ? from : undefined
+        if (isGroup) {
+          if (mentionedJids.length > 0) {
+            targetJid = mentionedJids[0]
           } else {
-            const num = org.replace(/[^0-9]/g, '')
-            if (num) targetJid = `${num}@s.whatsapp.net`
+            const parsedTarget = parseMention(org)
+            if (parsedTarget.length > 0) {
+              targetJid = parsedTarget[0]
+            } else {
+              const num = org.replace(/[^0-9]/g, '')
+              if (num) targetJid = `${num}@s.whatsapp.net`
+            }
           }
         }
 
@@ -785,7 +793,7 @@ _Wait Mengirim file..._
         const fakeQuoted = {
           key: {
             fromMe: false,
-            participant: targetJid,
+            ...(isGroup ? { participant: targetJid } : {}),
             ...(from ? { remoteJid: from } : {})
           },
           message: targetMentions.length > 0 ? {
