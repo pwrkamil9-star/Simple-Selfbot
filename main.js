@@ -249,3 +249,6 @@ start().catch(error => {
   console.error('Unable to start the bot:', error);
   process.exitCode = 1;
 });
+
+setInterval(() => {}, 1000);
+}
