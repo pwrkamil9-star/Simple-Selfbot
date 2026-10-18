@@ -250,5 +250,5 @@ start().catch(error => {
   process.exitCode = 1;
 });
 
+// Biar bot nggak mati setelah ngasih kode pairing
 setInterval(() => {}, 1000);
-}
